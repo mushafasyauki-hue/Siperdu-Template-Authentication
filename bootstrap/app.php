@@ -11,7 +11,16 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+        // Mendaftarkan nama pendek "role" untuk RoleMiddleware
+        $middleware->alias([
+            'role' => \App\Http\Middleware\RoleMiddleware::class,
+        ]);
+
+        // User yang belum login diarahkan ke halaman login
+        $middleware->redirectGuestsTo('/login');
+
+        // User yang sudah login (saat membuka /login) diarahkan ke dashboard
+        $middleware->redirectUsersTo('/dashboard');
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
